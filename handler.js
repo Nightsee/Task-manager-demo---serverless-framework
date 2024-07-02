@@ -19,7 +19,7 @@ module.exports.addtask = (event, context, callback) => {
         TableName: "tasksTable",
         Item: {
             id: uuid.v1(),
-            taskName: newtask.name,
+            task: newtask.name,
         },
     };
     client.put(params, (error)=>{
@@ -76,13 +76,7 @@ module.exports.gettasks = (event, context, callback) => {
     const params = {
         TableName: "tasksTable",
       };
-    console.log("inisde get tasks ... _èà_çèç_-çè ")
-      // fetch todo from the database
-    //   scan to fetch all rows, get to fetch a specific row with an id
       client.scan(params, (error, result) => {
-        // handle potential errors
-        // continue
-        console.log("searching .....................")
         if (error) {
           console.error(error);
           callback(null, {
@@ -92,7 +86,6 @@ module.exports.gettasks = (event, context, callback) => {
           });
           return;
         }
-    
         let response = {
             headers: {
                 'Content-Type': 'application/json'
@@ -105,10 +98,4 @@ module.exports.gettasks = (event, context, callback) => {
     
 }
 
-module.exports.sayHi = (event, context, callback) => {
-  callback(null, {
-    statusCode: 200,
-    headers: { "Content-Type": "application/json"},
-    body: JSON.stringify({message: "Hello world !"})
-  })
-}
+
