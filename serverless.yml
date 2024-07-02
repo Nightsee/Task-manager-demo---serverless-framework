@@ -4,8 +4,6 @@ provider:
   name: aws
   runtime: nodejs20.x
   stage: local
-  # httpApi:
-  #   cors: true
 
 plugins:
   - serverless-dynamodb-local
@@ -38,12 +36,10 @@ custom:
     host: localhost
     directory: ./s3
   s3Sync:
-    # an alternate s3 endpoint
     endpoint: http://localhost:4569
     buckets:
-    # A simple configuration for copying static assets
-    - bucketName: local-bucket # required
-      localDir: ./static/  # required
+    - bucketName: local-bucket 
+      localDir: ./static/
 
 resources:
   Resources:
@@ -99,10 +95,5 @@ functions:
       - http: 
           path: /add
           method: POST
-  sayHi:
-    handler: handler.sayHi
-    events:
-      - http:
-          path: /hello
-          method: get
+
 
