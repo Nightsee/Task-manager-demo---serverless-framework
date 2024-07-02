@@ -1,0 +1,108 @@
+service: task-manager-serverless
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: local
+  # httpApi:
+  #   cors: true
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-s3-local
+  - serverless-s3-sync
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 4000
+    lambdaPort: 4001
+    allowCache: true
+    noPrependStageInUrl: true
+
+  dynamodb:
+    stages:
+      - local
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
+      convertEmptyValues: true
+    seed:
+        local:
+            sources:
+                - table: tasksTable
+                  sources: [dbSeed/fake.json]
+  s3:
+    host: localhost
+    directory: ./s3
+  s3Sync:
+    # an alternate s3 endpoint
+    endpoint: http://localhost:4569
+    buckets:
+    # A simple configuration for copying static assets
+    - bucketName: local-bucket # required
+      localDir: ./static/  # required
+
+resources:
+  Resources:
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: local-bucket
+        AccessControl: PublicRead
+        WebsiteConfiguration:
+          IndexDocument: index.html
+    tasksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: tasksTable
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    
+functions:
+  gettasks:
+    name: 'get-task'
+    handler: handler.gettasks
+    reservedConcurrency: 1
+    memorySize: 256
+    timeout: 10
+    events:
+      - http:
+          path: /
+          method: GET
+  removetask:
+    name: 'remove-task'
+    handler: handler.removetask
+    reservedConcurrency: 1
+    memorySize: 256
+    timeout: 10
+    events:	
+      - http:
+          path: /delete/{id}
+          method: DELETE
+  addtask:
+    name: 'add-task'
+    handler: handler.addtask
+    reservedConcurrency: 1
+    memorySize: 256
+    timeout: 10
+    events:
+      - http: 
+          path: /add
+          method: POST
+  sayHi:
+    handler: handler.sayHi
+    events:
+      - http:
+          path: /hello
+          method: get
+

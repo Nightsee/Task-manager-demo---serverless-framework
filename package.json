@@ -1,0 +1,23 @@
+{
+  "name": "task-manager-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "build": "npm run clean",
+    "clean": "rimraf .build .output dist",
+    "db:seed": "sls dynamodb seed",
+    "postinstall": "sls dynamodb install",
+    "start": "npm run build && sls offline start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1651.0",
+    "serverless-dynamodb-local": "^0.2.40",
+    "serverless-s3-sync": "^3.3.0",
+    "serverless-offline": "^13.6.0",
+    "serverless-s3-local": "^0.3.23",
+    "uuid": "^10.0.0"
+  }
+}
