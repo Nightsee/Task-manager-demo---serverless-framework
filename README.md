@@ -4,6 +4,14 @@
 
 
 
+## Plugins
+
+- serverless-offline
+- serverless-s3-local
+- serverless-s3-sync
+- serverless-dynamodb-local
+
+
 ## Run Locally
 
 Clone the project
@@ -48,17 +56,3 @@ browse to
 ```
   http://localhost:4569/local-bucket/index.html
 ```
-## Tech Stack
-
-**Client:** React, Redux, TailwindCSS
-
-**Server:** Node, Express
-
-
-## Plugins
-
-- serverless-offline
-- serverless-s3-local
-- serverless-s3-sync
-- serverless-dynamodb-local
-
